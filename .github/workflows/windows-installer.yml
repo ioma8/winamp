@@ -40,6 +40,10 @@ jobs:
           New-Item -ItemType Directory -Force -Path $qtRoot | Out-Null
           python -m aqt install-qt windows desktop 5.15.2 win32_msvc2019 -O $qtRoot --modules qtwebengine
 
+      - name: Validate CI PowerShell scripts
+        shell: powershell
+        run: .\ci\windows\validate-scripts.ps1
+
       - name: Bootstrap native dependencies
         shell: powershell
         run: .\ci\windows\bootstrap.ps1
