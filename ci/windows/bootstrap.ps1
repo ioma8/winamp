@@ -135,7 +135,8 @@ function Ensure-AtlTransactionManagerPatch {
         Select-Object -First 1 -ExpandProperty FullName
 
     if (-not $atlHeader) {
-        throw "atltransactionmanager.h was not found under the Visual Studio installation."
+        Write-Warning "atltransactionmanager.h was not found under the Visual Studio installation; skipping patch."
+        return
     }
 
     $original = 'return ::DeleteFile((LPTSTR)lpFileName);'
