@@ -38,7 +38,7 @@ jobs:
         run: |
           $qtRoot = Join-Path $env:GITHUB_WORKSPACE "_qt"
           New-Item -ItemType Directory -Force -Path $qtRoot | Out-Null
-          python -m aqt install-qt windows desktop 5.15.2 win32_msvc2019 -O $qtRoot --modules qtwebengine qtwebview
+          python -m aqt install-qt windows desktop 5.15.2 win32_msvc2019 -O $qtRoot --modules qtwebengine
 
       - name: Bootstrap native dependencies
         shell: powershell
