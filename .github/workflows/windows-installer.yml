@@ -56,8 +56,8 @@ jobs:
           if (-not $installPath) { throw "Visual Studio installation not found." }
           $vsDevCmd = Join-Path $installPath "Common7\Tools\VsDevCmd.bat"
           $customInclude = Join-Path $env:GITHUB_WORKSPACE "ci\windows\include"
-          $env:INCLUDE = "$customInclude;$env:INCLUDE"
-          cmd.exe /d /s /c "call `"$vsDevCmd`" -arch=x86 -host_arch=x64 && msbuild winampAll_2019.sln /m /p:Configuration=Release /p:Platform=Win32 /p:QtMsBuild=`"%QtMsBuild%`" /p:QtRootDir=`"%QT_ROOT_DIR%`" /p:VcpkgInstalledDir=`"%VCPKG_ROOT%`""
+          $launcher = Join-Path $env:GITHUB_WORKSPACE "ci\windows\build-winamp.cmd"
+          cmd.exe /d /s /c "`"$launcher`" `"$vsDevCmd`" `"$customInclude`""
           if ($LASTEXITCODE -ne 0) { throw "msbuild failed with exit code $LASTEXITCODE." }
 
       - name: Stage files and create installer
