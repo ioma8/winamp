@@ -1,4 +1,5 @@
 @echo off
+setlocal EnableExtensions EnableDelayedExpansion
 
 if not defined MAKENSIS set MAKENSIS=C:\Program Files\NSIS\UNICODE\makensis.exe
 if not defined WAPROJECTS set WAPROJECTS=c:\projects
@@ -8,8 +9,8 @@ set MAKENSIS_COMMON_PARAM=/V1 /P4 /DUSE_MUI /DLZMA
 if %TARGET_ARCH%==x64 set MAKENSIS_COMMON_PARAM=%MAKENSIS_COMMON_PARAM% /DWINAMP64
 set SCRIPT=%CURSANDBOX%\installer\winamp\main.nsi
 
-if not defined INSTALLER_LANG set INSTALLER_LANG=Mastering\Winamp\installer_beta.lang
-if not defined INSTALLER_CONFIG set INSTALLER_CONFIG=Mastering\Winamp\installer_beta.config
+if not defined INSTALLER_LANG set INSTALLER_LANG=Mastering\Winamp\installer_final.lang
+if not defined INSTALLER_CONFIG set INSTALLER_CONFIG=Mastering\Winamp\installer_final.config
 
 SET WINAMP_VERSION_MAJOR=5
 SET WINAMP_VERSION_MINOR=9
@@ -19,7 +20,7 @@ SET WINAMP_VERSION_MINOR_SECOND=0
 for /F %%i in (%CURSANDBOX%\%INSTALLER_LANG%) do (
 
   set MAKENSIS_RUN_PARAM=  
-  for /F "eol=; tokens=1,2,3,4,5,6,7,8,9 delims=," %%j in (%CURSANDBOX%\%INSTALLER_CONFIG%) do (m00stercow
+  for /F "eol=; tokens=1,2,3,4,5,6,7,8,9 delims=," %%j in (%CURSANDBOX%\%INSTALLER_CONFIG%) do (
   
 
     if /I "%%i" NEQ "all" (
@@ -71,3 +72,5 @@ for /F %%i in (%CURSANDBOX%\%INSTALLER_LANG%) do (
     )
   )
 )
+
+endlocal

@@ -1,4 +1,4 @@
-SET INSTALL_NAME=winamp512_0224_beta
+if not defined INSTALL_NAME SET INSTALL_NAME=winamp512_0224_beta
 
 SET INSTALL_FILE_NAME=%INSTALL_NAME%
 if %TARGET_ARCH%==x86 goto skip64
@@ -25,7 +25,6 @@ SET INSTALL_BUNDLE=junk
 SET INSTALL_DEVICES=junk
 
 :end
-
 
 
 

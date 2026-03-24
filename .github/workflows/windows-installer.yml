@@ -1,0 +1,73 @@
+name: windows-installer
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-installer:
+    runs-on: windows-2022
+    timeout-minutes: 180
+
+    env:
+      QT_ROOT_DIR: ${{ github.workspace }}\_qt\5.15.2\msvc2019
+      QtMsBuild: ${{ github.workspace }}\ci\windows\qtmsbuild
+      VCPKG_ROOT: ${{ github.workspace }}\Src\external_dependencies\vcpkg
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install toolchain packages
+        shell: powershell
+        run: |
+          choco install 7zip nsis nasm strawberryperl --no-progress -y
+          python -m pip install --upgrade pip
+          python -m pip install aqtinstall
+
+      - name: Install Qt 5.15.2 x86
+        shell: powershell
+        run: |
+          $qtRoot = Join-Path $env:GITHUB_WORKSPACE "_qt"
+          New-Item -ItemType Directory -Force -Path $qtRoot | Out-Null
+          python -m aqt install-qt windows desktop 5.15.2 win32_msvc2019 -O $qtRoot --modules qtwebengine qtwebview
+
+      - name: Bootstrap native dependencies
+        shell: powershell
+        run: .\ci\windows\bootstrap.ps1
+
+      - name: Build Winamp solution
+        shell: powershell
+        run: |
+          $vsWhere = Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\Installer\vswhere.exe"
+          $installPath = & $vsWhere -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
+          if (-not $installPath) { throw "Visual Studio installation not found." }
+          $vsDevCmd = Join-Path $installPath "Common7\Tools\VsDevCmd.bat"
+          cmd.exe /d /s /c "call `"$vsDevCmd`" -arch=x86 -host_arch=x64 && msbuild winampAll_2019.sln /m /p:Configuration=Release /p:Platform=Win32 /p:QtMsBuild=`"%QtMsBuild%`" /p:QtRootDir=`"%QT_ROOT_DIR%`" /p:VcpkgInstalledDir=`"%VCPKG_ROOT%`""
+          if ($LASTEXITCODE -ne 0) { throw "msbuild failed with exit code $LASTEXITCODE." }
+
+      - name: Stage files and create installer
+        shell: powershell
+        run: .\ci\windows\stage-installer.ps1
+
+      - name: Upload build tree
+        uses: actions/upload-artifact@v4
+        with:
+          name: winamp-build-tree
+          path: Build\Winamp_x86_Release
+          if-no-files-found: error
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: winamp-installer
+          path: Src\installer\winamp\*.exe
+          if-no-files-found: error

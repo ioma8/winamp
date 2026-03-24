@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="QtGenerateMoc" BeforeTargets="ClCompile" Condition="'@(QtMoc)' != ''">
+    <Error Condition="'$(QtRootDir)'==''" Text="QtRootDir or QT_ROOT_DIR must point to the Qt installation root." />
+    <Error Condition="!Exists('$(QtMocExe)')" Text="moc.exe was not found at $(QtMocExe)." />
+    <MakeDir Directories="$(IntDir)qt" />
+    <ItemGroup>
+      <QtGeneratedMoc Include="@(QtMoc->'$(IntDir)qt\moc_%(Filename).cpp')" />
+      <ClCompile Include="@(QtGeneratedMoc)" />
+    </ItemGroup>
+    <Exec
+      Command="&quot;$(QtMocExe)&quot; -DWIN32 -D_UNICODE -DUNICODE -I&quot;$(MSBuildProjectDirectory)&quot; -I&quot;$(MSBuildProjectDirectory)\..\..\Wasabi&quot; -I&quot;$(MSBuildProjectDirectory)\..\..\replicant&quot; -I&quot;$(QtIncludeDir)&quot; -I&quot;$(QtIncludeDir)\QtConcurrent&quot; -I&quot;$(QtIncludeDir)\QtCore&quot; -I&quot;$(QtIncludeDir)\QtGui&quot; -I&quot;$(QtIncludeDir)\QtNetwork&quot; -I&quot;$(QtIncludeDir)\QtQml&quot; -I&quot;$(QtIncludeDir)\QtQuick&quot; -I&quot;$(QtIncludeDir)\QtWebChannel&quot; -I&quot;$(QtIncludeDir)\QtWebEngine&quot; -I&quot;$(QtIncludeDir)\QtWebEngineCore&quot; -I&quot;$(QtIncludeDir)\QtWebEngineWidgets&quot; -I&quot;$(QtIncludeDir)\QtWebView&quot; -I&quot;$(QtIncludeDir)\QtWidgets&quot; -o &quot;$(IntDir)qt\moc_%(QtMoc.Filename).cpp&quot; &quot;%(QtMoc.FullPath)&quot;"
+      Inputs="%(QtMoc.FullPath)"
+      Outputs="$(IntDir)qt\moc_%(QtMoc.Filename).cpp" />
+  </Target>
+</Project>

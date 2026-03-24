@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <QtRootDir Condition="'$(QtRootDir)'=='' and '$(QT_ROOT_DIR)'!=''">$(QT_ROOT_DIR)</QtRootDir>
+    <QtRootDir Condition="'$(QtRootDir)'=='' and '$(QTDIR)'!=''">$(QTDIR)</QtRootDir>
+    <QtBinDir Condition="'$(QtBinDir)'==''">$(QtRootDir)\bin</QtBinDir>
+    <QtIncludeDir Condition="'$(QtIncludeDir)'==''">$(QtRootDir)\include</QtIncludeDir>
+    <QtLibDir Condition="'$(QtLibDir)'==''">$(QtRootDir)\lib</QtLibDir>
+    <OpenSSLRootDir Condition="'$(OpenSSLRootDir)'=='' and '$(OPENSSL_ROOT_DIR)'!=''">$(OPENSSL_ROOT_DIR)</OpenSSLRootDir>
+    <OpenSSLRootDir Condition="'$(OpenSSLRootDir)'==''">C:\OpenSSL\Release_x86_static</OpenSSLRootDir>
+    <OpenSSLIncludeDir Condition="'$(OpenSSLIncludeDir)'==''">$(OpenSSLRootDir)\include</OpenSSLIncludeDir>
+    <OpenSSLLibDir Condition="'$(OpenSSLLibDir)'==''">$(OpenSSLRootDir)\lib</OpenSSLLibDir>
+    <QtMocExe Condition="'$(QtMocExe)'==''">$(QtBinDir)\moc.exe</QtMocExe>
+    <QtLibSuffix Condition="'$(Configuration)'=='Debug'">d</QtLibSuffix>
+    <QtLibSuffix Condition="'$(QtLibSuffix)'==''"></QtLibSuffix>
+    <Qt_INCLUDEPATH_>$(QtIncludeDir);$(QtIncludeDir)\QtConcurrent;$(QtIncludeDir)\QtCore;$(QtIncludeDir)\QtGui;$(QtIncludeDir)\QtNetwork;$(QtIncludeDir)\QtQml;$(QtIncludeDir)\QtQuick;$(QtIncludeDir)\QtWebChannel;$(QtIncludeDir)\QtWebEngine;$(QtIncludeDir)\QtWebEngineCore;$(QtIncludeDir)\QtWebEngineWidgets;$(QtIncludeDir)\QtWebView;$(QtIncludeDir)\QtWidgets;$(OpenSSLIncludeDir)</Qt_INCLUDEPATH_>
+    <Qt_LIBS_>Qt5Concurrent$(QtLibSuffix).lib;Qt5Core$(QtLibSuffix).lib;Qt5Gui$(QtLibSuffix).lib;Qt5Network$(QtLibSuffix).lib;Qt5Qml$(QtLibSuffix).lib;Qt5Quick$(QtLibSuffix).lib;Qt5WebChannel$(QtLibSuffix).lib;Qt5WebEngine$(QtLibSuffix).lib;Qt5WebEngineCore$(QtLibSuffix).lib;Qt5WebEngineWidgets$(QtLibSuffix).lib;Qt5WebView$(QtLibSuffix).lib;Qt5Widgets$(QtLibSuffix).lib;ssleay32.lib;libeay32.lib</Qt_LIBS_>
+    <LibraryPath>$(QtLibDir);$(OpenSSLLibDir);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+</Project>

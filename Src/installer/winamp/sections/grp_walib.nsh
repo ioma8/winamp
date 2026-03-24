@@ -82,6 +82,12 @@ SectionGroup $(IDS_GRP_WALIB) IDX_GRP_WALIB                            ;  Winamp
 		SetOutPath $INSTDIR
 		File ${FILES_PATH}\Qt5Core.dll
 		File ${FILES_PATH}\Qt5Network.dll
+		SetOutPath $INSTDIR\platforms
+		File ${FILES_PATH}\platforms\qwindows.dll
+		SetOutPath $INSTDIR\printsupport
+		File ${FILES_PATH}\printsupport\windowsprintersupport.dll
+		SetOutPath $INSTDIR\QtPositioning
+		File ${FILES_PATH}\QtPositioning\declarative_positioning.dll
 
 /*
 		; Placeholder - code is currently not working
