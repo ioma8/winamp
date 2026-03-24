@@ -68,7 +68,7 @@ function Invoke-CmdOrThrow {
 
     cmd.exe /d /s /c $Command
     if ($LASTEXITCODE -ne 0) {
-        throw "Command failed with exit code $LASTEXITCODE: $Command"
+        throw "Command failed with exit code ${LASTEXITCODE}: $Command"
     }
 }
 
