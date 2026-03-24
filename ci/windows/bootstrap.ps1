@@ -5,6 +5,8 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
+. (Join-Path $PSScriptRoot "vcpkg-bootstrap-common.ps1")
+
 function Get-7ZipPath {
     $candidates = @(
         "$env:ProgramFiles\7-Zip\7z.exe",
@@ -85,9 +87,13 @@ function Ensure-VcpkgTree {
         Invoke-CmdOrThrow "call `"$bootstrapScript`" -disableMetrics"
     }
 
+    $packageSpecs = Get-VcpkgPackageSpecs
+    Assert-VcpkgPortsExist -VcpkgRoot $vcpkgRoot -PackageSpecs $packageSpecs
+
     Push-Location $vcpkgRoot
     try {
-        Invoke-CmdOrThrow "call `"$vcpkgExe`" install fmt:x86-windows lame:x86-windows-static minizip:x86-windows-static zlib:x86-windows-static expat:x86-windows-static curl[openssl]:x86-windows-static openssl:x86-windows-static minizip:x86-windows-static-md zlib:x86-windows-static-md expat:x86-windows-static-md curl[openssl]:x86-windows-static-md openssl:x86-windows-static-md"
+        $packageSpecList = $packageSpecs -join " "
+        Invoke-CmdOrThrow "call `"$vcpkgExe`" install $packageSpecList"
         Invoke-CmdOrThrow "call `"$vcpkgExe`" integrate install"
     }
     finally {
